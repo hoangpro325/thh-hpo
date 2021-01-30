@@ -275,66 +275,6 @@ def getItems(url_path="0", tq="select A,B,C,D,E"):
 			"thumbnail": "http://1.bp.blogspot.com/-gc1x9VtxIg0/VbggLVxszWI/AAAAAAAAANo/Msz5Wu0wN4E/s1600/playlist-advertorial.png",
 			"is_playable": True,
 			"info": {"type": "video"}
-
-		}
-		items += [add_playlist_item]
-		playlists = plugin.get_storage('playlists')
-		if 'sections' in playlists:
-			for section in playlists['sections']:
-				item = {
-					"context_menu": [
-						ClearPlaylists(section),
-					]
-				}
-				if "@@" in section:
-					tmp = section.split("@@")
-					passw = tmp[-1]
-					section = tmp[0]
-					item["label"] = section
-					item["path"] = "%s/password-section/%s/%s" % (
-						pluginrootpath,
-						passw,
-						section.split("] ")[-1]
-					)
-				else:
-					item["label"] = section
-					item["path"] = "%s/section/%s" % (
-						pluginrootpath,
-						section.split("] ")[-1]
-					)
-				item["thumbnail"] = "https://www.upsieutoc.com/images/2019/06/17/viuiuiuiui.png"
-				items.append(item)
-	return items
-
-
-@plugin.route('/remove-playlists/', name="remove_all")
-@plugin.route('/remove-playlists/<item>')
-def RemovePlaylists(item=""):
-	item = urllib.unquote_plus(item)
-	if item is not "":
-		playlists = plugin.get_storage('playlists')
-		if 'sections' in playlists:
-			new_playlists = []
-			for section in playlists["sections"]:
-				if section != item:
-					new_playlists += [section]
-			playlists["sections"] = new_playlists
-	else:
-		plugin.get_storage('playlists').clear()
-	xbmc.executebuiltin('Container.Refresh')
-
-
-def ClearPlaylists(item=""):
-	if item == "":
-		label = '[COLOR yellow]Xóa hết Playlists[/COLOR]'
-	else:
-		label = '[COLOR yellow]Xóa "%s"[/COLOR]' % item
-
-	return (label, actions.background(
-		"%s/remove-playlists/%s" % (pluginrootpath, urllib.quote_plus(item))
-	))
-
-
 def getValue(colid):
 	'''
 	Hàm lấy giá trị theo cột của của mỗi dòng sheet
